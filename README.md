@@ -9,7 +9,7 @@ Autori
 ------
 
 MCBP.php
-- xpekny00, Adam Pekní 
+- xpekny00, Adam Pekný 
 - xkontr02, Jakub Kontrík 
 - xlasmi00, Michal Ľaš 
 - xslavi37, Samuel Slávik 

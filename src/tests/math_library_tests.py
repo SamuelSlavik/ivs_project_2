@@ -1,16 +1,27 @@
+# ivs project 2
+# tests for mathematical functions
+# author: Samuel Slávik
+# version: 1.4
+
 import unittest
 
+# Importing math functions from math_library
 from src.math_library import MathFunctions
 math = MathFunctions()
 
+# Defining class "Test" for all the tests
 class Test(unittest.TestCase):
 
     def test_addition(self):
+        # pairs of testing arguments
         test_numbers = [[0, 0], [42, 23], [-42, -23], [42, 0], [0, -42],
                         [3.14, 42], [-42, 3.14], [11.9, 2.72], [14.88, -666.0]]
+        # expected results
         results = [0, 65, -65, 42, -42, 45.14, -38.86, 14.62, -651.12]
+        # false results
         false_results = [1, 3.85, 2.29, -1, 72, 45.141, -5, 26, 7]
 
+        # looping through pairs of arguments and comparing them with expected and false results
         for equations in range(len(test_numbers)):
             self.assertEqual(math.addition(test_numbers[equations][0], test_numbers[equations][1]), results[equations])
             self.assertNotEqual(math.addition(test_numbers[equations][0], test_numbers[equations][1]), false_results[equations])

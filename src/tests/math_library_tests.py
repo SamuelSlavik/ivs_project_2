@@ -81,7 +81,7 @@ class Test(unittest.TestCase):
 
         for equations in range(len(test_numbers)):
             self.assertEqual(math.factorial(test_numbers[equations]), results[equations])
-            self.assertNotEqual(MathFunctions.factorial(test_numbers[equations]), false_results[equations])
+            self.assertNotEqual(math.factorial(test_numbers[equations]), false_results[equations])
 
         with self.assertRaises(ValueError):
             math.factorial(-1)
@@ -91,9 +91,9 @@ class Test(unittest.TestCase):
 
 
     def test_root(self):
-        test_numbers = [[1, 1], [0, 2], [0, -2], [0, 2.5], [4, 2], [0.25, 2], [-0.027, 3]]
-        results = [1, 0, 0, 0, 2, 0.5, -0.3]
-        false_results = [0, 1, -3, -120, 1, 9.11, -9.11]
+        test_numbers = [[1, 1], [0, 2], [0, 2.5], [4, 2], [0.25, 2], [-0.027, 3]]
+        results = [1, 0, 0, 2, 0.5, -0.3]
+        false_results = [0, 1, -120, 1, 9.11, -9.11]
 
         for equations in range(len(test_numbers)):
             self.assertEqual(math.root(test_numbers[equations][0], test_numbers[equations][1]), results[equations])
@@ -108,15 +108,24 @@ class Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             math.root(-2, -2)
 
+        with self.assertRaises(ZeroDivisionError):
+            math.root(0, -2)
+
+        with self.assertRaises(ZeroDivisionError):
+            math.root(0, -3)
+
+        with self.assertRaises(ZeroDivisionError):
+            math.root(0, 0)
+
     def test_modulo(self):
         test_numbers = [[42, 21], [-42, -2], [42, 4], [0, -42],
                         [3.14, 3.14], [-42, 32], [13.5, 11.58], [60, 120]]
         results = [0, 0, 2, 0, 0, 22, 1.92, 60]
-        false_results = [-1, 1, -3, -120, 1, 9.11, -9.11]
+        false_results = [-1, 1, -3, -120, 1, 9.11, -9.11, 61]
 
         for equations in range(len(test_numbers)):
-            self.assertEqual(math.root(test_numbers[equations][0], test_numbers[equations][1]), results[equations])
-            self.assertNotEqual(math.root(test_numbers[equations][0], test_numbers[equations][1]), false_results[equations])
+            self.assertEqual(math.modulo(test_numbers[equations][0], test_numbers[equations][1]), results[equations])
+            self.assertNotEqual(math.modulo(test_numbers[equations][0], test_numbers[equations][1]), false_results[equations])
 
         with self.assertRaises(ZeroDivisionError):
             math.modulo(1, 0)

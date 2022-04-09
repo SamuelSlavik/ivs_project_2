@@ -1,16 +1,8 @@
-
-
 ##
 # @file math_library.py
 # @brief Mathematical library for calculator
 # @author Michal Ľaš <xlasmi00@vutbr.cz>
 #
-
-
-from decimal import DivisionByZero
-from logging import root
-from math import factorial
-import re
 
 
 class MathFunctions:
@@ -89,13 +81,15 @@ class MathFunctions:
     # @brief function root 2 numbers
     # @param num1 number of which root is calculated
     # @param root is na exponent of root
-    # @return root root of num1
+    # @return root of num1
     # @exception root cannot be 0 -> ZeroDivisionError
     # @exception if num1 is negative number and root % 2 is 0 -> ValueError
     #
     def root(self, num1: float, root: float):
         if num1 < 0 and (root % 2) == 0:
             raise ValueError("Root function only support real numbers (no complex numbers).")
+        elif num1 == 0 and root <= 0:
+            raise ZeroDivisionError
         else:
             try:
                 if num1 >= 0:

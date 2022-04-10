@@ -1,0 +1,56 @@
+{
+  "ˇ": {
+      "priority": 0,
+      "op_number": 1,
+      "op_side": "r",
+      "func_name": "unary_minus"
+  },
+  "^": {
+      "priority": 0,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "power"
+  },
+  "~": {
+      "priority": 0,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "root"
+  },
+  "!": {
+      "priority": 0,
+      "op_number": 1,
+      "op_side": "l",
+      "func_name": "factorial"
+  },
+  "%": {
+      "priority": 1,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "modulo"
+  },
+  "*": {
+      "priority": 2,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "multiplication"
+  },
+  "/": {
+      "priority": 2,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "division"
+  },
+  "+": {
+      "priority": 3,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "addition"
+  },
+  "-": {
+      "priority": 3,
+      "op_number": 2,
+      "op_side": "b",
+      "func_name": "subtraction"
+  }
+}

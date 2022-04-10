@@ -2,135 +2,117 @@
 # @file math_lib_interface.py
 # @brief interface for GUI communication with math library
 # @author Adam Pekný <xpekny00@vutbr.cz>
+import json
 
 from src.math_library import MathFunctions
 
-Math = MathFunctions()
+##
+# @var _Math
+# @brief Instance of class containing math methods
+#
+_Math = MathFunctions()
+
+file = open('../dependencies/operators.json')
+##
+# @var _operators
+# @brief Dictionary containing information about operators loaded from operators.json file in dependencies
+#
+_operators = json.load(file)
+
+file.close()
+
+##
+# Class _TreeNode
+# @brief Private class used to create a binary expression tree and containing methods for operations above the tree
+#
 
 
-class _Operator:
-    def __init__(self, symbol, op_num, op_side, priority):
-        self.symbol = symbol
-        self.op_num = op_num
-        self.op_side = op_side
-        self.priority = priority
-
-
-class _Operators:
-    def __init__(self):
-        self.addition = _Operator('+', 2, 'b', 3)
-        self.subtraction = _Operator('-', 2, 'b', 3)
-        self.multiplication = _Operator('*', 2, 'b', 2)
-        self.division = _Operator('/', 2, 'b', 2)
-        self.modulo = _Operator('%', 2, 'b', 1)
-        self.power = _Operator('^', 2, 'b', 0)
-        self.root = _Operator('~', 2, 'b', 0)
-        self.factorial = _Operator('!', 1, 'l', 0)
-        self.minus_unary = _Operator('ˇ', 1, 'r', 0)
-
-        self.ops_number = 9
-
-
-class _BinExpTree:
+class _TreeNode:
+    ##
+    # Constructor
+    # @brief Creates binary expression tree from expression stored in string via recursion
+    # @param self The instance of class
+    # @param expression The expression stored in string
+    # Attributes:
+    #   value -> can be either operand or operator
+    #   left -> left child node
+    #   right -> right child node
+    # Functionality:
+    #   First it checks whether the expression is digit, if yes it means it is leaf node and expression can be stored to
+    #   value attribute with no further processing.
+    #   If it is not it finds index of operator with the lowest priority and divides expression into two parts around
+    #   this index. Then calls constructor on the child nodes passing respective parts of expression.
+    #   For highest priority operators first operator found is considered as breaking point (for others last)
+    # Example:
+    #   tree = _TreeNode("5+2")
+    #   Attribute values:
+    #       tree.value -> "+" (root)
+    #       tree.left -> _TreeNode object (value = "5", left = None, right = None) (leaf)
+    #       tree.right -> _TreeNode object (value = "2", left = None, right = None) (leaf)
+    #
     def __init__(self, expression):
         if expression.isdigit():
             self.value = expression
             self.left = None
             self.right = None
+
         else:
-            if expression[self.find_low_prio(expression)] != "ˇ":
-                self.left = _BinExpTree(expression[0:self.find_low_prio(expression)])
-            if expression[self.find_low_prio(expression)] != "!":
-                self.right = _BinExpTree(expression[self.find_low_prio(expression) + 1:])
-            self.value = expression[self.find_low_prio(expression)]
+            current_operator_idx = self.find_low_prio(expression)
+            current_operator = expression[current_operator_idx]
 
-    ops = _Operators()
-    operators = {
-        'ˇ': {
-            "priority": 0,
-            "side": 'r'
-        },
-        '^': {
-            "priority": 0,
-            "side": 'b'
-        },
-        '~': {
-            "priority": 0,
-            "side": 'b'
-        },
-        '!': {
-            "priority": 0,
-            "side": 'l'
-        },
-        '%': {
-            "priority": 1,
-            "side": 'b'
-        },
-        '*': {
-            "priority": 2,
-            "side": 'b'
-        },
-        '/': {
-            "priority": 2,
-            "side": 'b'
-        },
-        '+': {
-            "priority": 3,
-            "side": 'b'
-        },
-        '-': {
-            "priority": 3,
-            "side": 'b'
-        }
-    }
+            if _operators[current_operator]["op_side"] != "r":
+                self.left = _TreeNode(expression[0:current_operator_idx])
 
-    def find_low_prio(self, expression):
+            if _operators[current_operator]["op_side"] != "l":
+                self.right = _TreeNode(expression[current_operator_idx + 1:])
+
+            self.value = current_operator
+
+    ##
+    # Method find_low_prio
+    # @brief Method used to find index of lowest
+    # @param expression The expression stored as string
+    #
+    @staticmethod
+    def find_low_prio(expression):
         lowest = -1
         lowest_idx = 0
-        idx = 0
+        current_idx = 0
         for item in expression:
-            if item in self.operators:
+            if item in _operators:
                 if lowest == 0:
-                    if self.operators[item]["priority"] > lowest:
-                        lowest = self.operators[item]["priority"]
-                        lowest_idx = idx
+                    if _operators[item]["priority"] > lowest:
+                        lowest = _operators[item]["priority"]
+                        lowest_idx = current_idx
                 else:
-                    if self.operators[item]["priority"] >= lowest:
-                        lowest = self.operators[item]["priority"]
-                        lowest_idx = idx
-            idx += 1
+                    if _operators[item]["priority"] >= lowest:
+                        lowest = _operators[item]["priority"]
+                        lowest_idx = current_idx
+
+            current_idx += 1
+            
         return lowest_idx
+
+    def eval_node(self, func):
+        if _operators[self.value]["op_number"] == 2:
+            if self.left and self.right:
+                return func(int(self.left.eval()), int(self.right.eval()))
+
+        elif _operators[self.value]["op_number"] == 1:
+            if _operators[self.value]["op_side"] == 'l':
+                return func(int(self.left.eval()))
+
+            elif _operators[self.value]["op_side"] == 'r':
+                return func(int(self.right.eval()))
 
     def eval(self):
         if self.value.isdigit():
             return self.value
-        elif self.value == '+':
-            if self.left and self.right:
-                return Math.addition(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == '-':
-            if self.left and self.right:
-                return Math.subtraction(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == '*':
-            if self.left and self.right:
-                return Math.multiplication(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == '/':
-            if self.left and self.right:
-                return Math.division(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == '%':
-            if self.left and self.right:
-                return Math.modulo(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == '~':
-            if self.left and self.right:
-                return Math.root(int(self.right.eval()), int(self.left.eval()))
-        elif self.value == '!':
-            if self.left:
-                return Math.factorial(int(self.left.eval()))
-        elif self.value == '^':
-            if self.left and self.right:
-                return Math.power(int(self.left.eval()), int(self.right.eval()))
-        elif self.value == 'ˇ':
-            if self.right:
-                return int('-'+self.right.eval())
+        else:
+            func_name = _operators[self.value]["func_name"]
+            func = getattr(_Math, func_name)
+
+            return self.eval_node(func)
 
     def print_tree(self):
         if self.left:
@@ -142,7 +124,8 @@ class _BinExpTree:
 
 class MathLibInterface:
 
-    def _sub_unary_minus(self, expression):
+    @staticmethod
+    def _sub_unary_minus(expression):
         idx = 0
         for item in expression:
             if item == '-' and not expression[idx - 1].isdigit():
@@ -155,8 +138,7 @@ class MathLibInterface:
 
     def calc_expression(self, expression):
         expression = self._sub_unary_minus(expression)
-        tree = _BinExpTree(expression)
-        # tree.print_tree()
+        tree = _TreeNode(expression)
         print(f"expression recieved: {expression}")
 
         return tree.eval()

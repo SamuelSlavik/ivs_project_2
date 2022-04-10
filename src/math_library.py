@@ -85,7 +85,7 @@ class MathFunctions:
     # @exception root cannot be 0 -> ZeroDivisionError
     # @exception if num1 is negative number and root % 2 is 0 -> ValueError
     #
-    def root(self, num1: float, root: float):
+    def root(self, root: float, num1: float):
         if num1 < 0 and (root % 2) == 0:
             raise ValueError("Root function only support real numbers (no complex numbers).")
         elif num1 == 0 and root <= 0:

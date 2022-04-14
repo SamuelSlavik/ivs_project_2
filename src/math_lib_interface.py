@@ -3,8 +3,22 @@
 # @brief interface for GUI communication with math library
 # @author Adam Pekný <xpekny00@vutbr.cz>
 import json
+import re
 
 from src.math_library import MathFunctions
+
+
+def _is_numeric(expression):
+    try:
+        float(expression)
+        return True
+    except ValueError:
+        return False
+
+
+def _save_int_float(expression):
+    return float(expression) if float(expression) - int(expression) != 0 else int(expression)
+
 
 ##
 # @var _Math
@@ -20,6 +34,7 @@ file = open('../dependencies/operators.json')
 _operators = json.load(file)
 
 file.close()
+
 
 ##
 # Class _TreeNode
@@ -51,14 +66,16 @@ class _TreeNode:
     #       tree.right -> _TreeNode object (value = "2", left = None, right = None) (leaf)
     #
     def __init__(self, expression):
-        if expression.isdigit():
-            self.value = expression
+        if _is_numeric(expression):
+            self.value = _save_int_float(expression)
             self.left = None
             self.right = None
 
         else:
             current_operator_idx = self.find_low_prio(expression)
             current_operator = expression[current_operator_idx]
+            self.left = None
+            self.right = None
 
             if _operators[current_operator]["op_side"] != "r":
                 self.left = _TreeNode(expression[0:current_operator_idx])
@@ -90,45 +107,79 @@ class _TreeNode:
                         lowest_idx = current_idx
 
             current_idx += 1
-            
+
         return lowest_idx
 
-    def eval_node(self, func):
+    def eval_self(self, func):
         if _operators[self.value]["op_number"] == 2:
             if self.left and self.right:
-                return func(int(self.left.eval()), int(self.right.eval()))
+                return func(self.left.eval_tree(), self.right.eval_tree())
 
         elif _operators[self.value]["op_number"] == 1:
             if _operators[self.value]["op_side"] == 'l':
-                return func(int(self.left.eval()))
+                return func(self.left.eval_tree())
 
             elif _operators[self.value]["op_side"] == 'r':
-                return func(int(self.right.eval()))
+                return func(self.right.eval_tree())
 
-    def eval(self):
-        if self.value.isdigit():
+    def eval_tree(self):
+        if _is_numeric(self.value):
             return self.value
         else:
             func_name = _operators[self.value]["func_name"]
             func = getattr(_Math, func_name)
-
-            return self.eval_node(func)
+            return self.eval_self(func)
 
     def print_tree(self):
+        if self.value in _operators:
+            print('(', end=" ")
         if self.left:
             self.left.print_tree()
+        print(self.value, end=" ")
         if self.right:
             self.right.print_tree()
-        print(self.value)
+        if self.value in _operators:
+            print(')', end=" ")
 
 
 class MathLibInterface:
 
     @staticmethod
+    def _validate_exp_syntax(expression):
+        item_idx = 0
+        for item in expression:
+            if not (_is_numeric(item) or item in _operators):
+                return False
+            if item in _operators:
+
+                if _operators[item]["op_number"] == 1:
+                    if _operators[item]["op_side"] == 'r':
+                        if item_idx >= len(expression) - 1:
+                            return False
+                        if not _is_numeric(expression[item_idx + 1]) and expression[item_idx + 1] != item:
+                            return False
+                    elif _operators[item]["op_side"] == 'l':
+                        if item_idx <= 0:
+                            return False
+                        if not _is_numeric(expression[item_idx - 1]) and expression[item_idx - 1] != item:
+                            return False
+
+                elif _operators[item]["op_number"] > 1:
+                    if item_idx == 0 or item_idx >= len(expression) - 1:
+                        return False
+                    if not _is_numeric(expression[item_idx - 1]) and _operators[expression[item_idx - 1]]["op_number"] != 1:
+                        return False
+                    if not _is_numeric(expression[item_idx + 1]) and _operators[expression[item_idx + 1]]["op_number"] != 1:
+                        return False
+
+            item_idx += 1
+        return True
+
+    @staticmethod
     def _sub_unary_minus(expression):
         idx = 0
         for item in expression:
-            if item == '-' and not expression[idx - 1].isdigit():
+            if item == '-' and (idx == 0 or not _is_numeric(expression[idx - 1])):
                 expression = list(expression)
                 expression[idx] = 'ˇ'
                 expression = ''.join(expression)
@@ -138,7 +189,10 @@ class MathLibInterface:
 
     def calc_expression(self, expression):
         expression = self._sub_unary_minus(expression)
-        tree = _TreeNode(expression)
-        print(f"expression recieved: {expression}")
 
-        return tree.eval()
+        if not self._validate_exp_syntax(expression):
+            raise SyntaxError
+
+        tree = _TreeNode(expression)
+
+        return _save_int_float(tree.eval_tree())

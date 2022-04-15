@@ -111,3 +111,6 @@ class MathFunctions:
             return round(num1 % num2, 14)
         except ZeroDivisionError:
             raise ZeroDivisionError
+
+    def unary_minus(self, num1: float):
+        return -num1

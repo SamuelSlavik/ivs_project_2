@@ -17,7 +17,7 @@ def _is_numeric(expression):
 
 
 def _save_int_float(expression):
-    return float(expression) if float(expression) - int(expression) != 0 else int(expression)
+    return float(expression) if float(expression) - int(float(expression)) != 0 else int(expression)
 
 
 ##
@@ -148,7 +148,7 @@ class MathLibInterface:
     def _validate_exp_syntax(expression):
         item_idx = 0
         for item in expression:
-            if not (_is_numeric(item) or item in _operators):
+            if not (_is_numeric(item) or item in _operators or item == '.'):
                 return False
             if item in _operators:
 

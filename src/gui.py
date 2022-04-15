@@ -5,6 +5,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src.math_lib_interface import MathLibInterface
+_Interface = MathLibInterface()
+
 class Ui_Calculator(object):
     def setupUi(self, Calculator):
         Calculator.setObjectName("Calculator")
@@ -642,9 +645,6 @@ class Ui_Calculator(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 425, 22))
         self.menubar.setObjectName("menubar")
         Calculator.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(Calculator)
-        self.statusbar.setObjectName("statusbar")
-        Calculator.setStatusBar(self.statusbar)
 
         self.retranslateUi(Calculator)
         self.Button0.clicked.connect(self.numPressed)
@@ -722,12 +722,13 @@ class Ui_Calculator(object):
 
     def numPressed(self):
         global lastBut
-        butVal = self.Calculator.sender().text()
+
+        butVal = self.Calculator.sender()
         displayVal = self.Display.text()
-        if(displayVal == "0"):
-            self.Display.setText(butVal)
+        if(displayVal == "0" or lastBut == self.EqualityB):
+            self.Display.setText(butVal.text())
         else:
-            self.Display.setText(displayVal+butVal)
+            self.Display.setText(displayVal+butVal.text())
         lastBut = butVal
 
 
@@ -737,37 +738,40 @@ class Ui_Calculator(object):
         butPressed = self.Calculator.sender()
         if (self.Display.text()[-1]=="."):
             pointButPressed=False
-        if (butPressed == self.DeleteB):
+        if (butPressed == self.DeleteB and lastBut != self.EqualityB):
             ui.Display.setText(ui.Display.text()[:-1])
-        if (butPressed == self.ClearAllB or self.Display.text()==""):
+        if (butPressed == self.ClearAllB or self.Display.text()=="" or  lastBut == self.EqualityB):
             self.Display.setText("0")
-        lastBut=ui.Display.text()[-1]
+        lastBut = ui.Display.text()[-1]
 
     def funcPressed(self):
         global lastBut
         global pointButPressed
-        butVal = self.Calculator.sender().text()
-        if (butVal != "."):
+        butVal = self.Calculator.sender()
+        if (butVal != self.PointB):
             pointButPressed = False
-        elif (butVal == "."):
+        elif (butVal == self.PointB):
             if (pointButPressed):
                 return
             pointButPressed=True
-        if (lastBut == "*" or lastBut == "/" or lastBut == "+" or lastBut == "-" or
-             lastBut == "^" or lastBut == "!" or lastBut == "√" or lastBut == "%"):
+        if (lastBut == self.MultiplyB or lastBut == self.DivideB or lastBut == self.AddB or lastBut == self.SubB or
+             lastBut == self.PowerB or lastBut == self.FactB or lastBut == self.RootB or lastBut == self.ModuloB):
                 if (butVal != "."):
-                    self.Display.setText(self.Display.text()[:-1]+butVal)
+                    self.Display.setText(self.Display.text()[:-1]+butVal.text())
                 else:
                     pointButPressed=False
                     return
         elif (lastBut == "."):
             return
         else:
-            self.Display.setText(ui.Display.text()+butVal)
+            self.Display.setText(ui.Display.text()+butVal.text())
         lastBut = butVal
 
     def eqPressed(self):
-        return
+        global lastBut
+        result = str(_Interface.calc_expression(self.Display.text().replace("√", "~")))
+        self.Display.setText(result)
+        lastBut = self.Calculator.sender()
 
 
 

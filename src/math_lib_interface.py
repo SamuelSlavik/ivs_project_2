@@ -26,7 +26,7 @@ def _save_int_float(expression):
 #
 _Math = MathFunctions()
 
-file = open('../dependencies/operators.json')
+file = open('./dependencies/operators.json')
 ##
 # @var _operators
 # @brief Dictionary containing information about operators loaded from operators.json file in dependencies

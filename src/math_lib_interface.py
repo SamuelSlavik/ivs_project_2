@@ -26,12 +26,10 @@ def _save_int_float(expression):
 #
 _Math = MathFunctions()
 
-math_lib_interface
 dir_path = os.path.dirname(__file__)
 filename = os.path.join(dir_path, "dependencies/operators.json")
 file = open(filename)
 
-main
 ##
 # @var _operators
 # @brief Dictionary containing information about operators loaded from operators.json file in dependencies

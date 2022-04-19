@@ -1,27 +1,40 @@
-# ivs project 2
-# tests for mathematical functions
-# author: Samuel Slávik
-# version: 1.4
+##
+# @file math_library_tests.py
+# @brief Tests for mathematical functions
+# @author Samuel Slávik
+#
 
 import unittest
 
-# Importing math functions from math_library
+##
+# $brief Importing math functions from math_library
+#
 from src.math_library import MathFunctions
 math = MathFunctions()
 
-# Defining class "Test" for all the tests
+##
+# @brief Defining class "Test" for all the tests
+#
 class Test(unittest.TestCase):
 
     def test_addition(self):
-        # pairs of testing arguments
+        ##
+        # @brief Pairs of testing arguments
+        #
         test_numbers = [[0, 0], [42, 23], [-42, -23], [42, 0], [0, -42],
                         [3.14, 42], [-42, 3.14], [11.9, 2.72], [14.88, -666.0]]
-        # expected results
+        ##
+        # @brief expected results
+        #
         results = [0, 65, -65, 42, -42, 45.14, -38.86, 14.62, -651.12]
-        # false results
+        ##
+        # @brief false results
+        #
         false_results = [1, 3.85, 2.29, -1, 72, 45.141, -5, 26, 7]
 
-        # looping through pairs of arguments and comparing them with expected and false results
+        ##
+        # @brief looping through pairs of arguments and comparing them with expected and false results
+        #
         for equations in range(len(test_numbers)):
             self.assertEqual(math.addition(test_numbers[equations][0], test_numbers[equations][1]), results[equations])
             self.assertNotEqual(math.addition(test_numbers[equations][0], test_numbers[equations][1]), false_results[equations])
@@ -89,9 +102,8 @@ class Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             math.factorial(9.11)
 
-
     def test_root(self):
-        test_numbers = [[1, 1], [0, 2], [0, 2.5], [4, 2], [0.25, 2], [-0.027, 3]]
+        test_numbers = [[1, 1], [2, 0], [2.5, 0], [2, 4], [2, 0.25], [3, -0.027]]
         results = [1, 0, 0, 2, 0.5, -0.3]
         false_results = [0, 1, -120, 1, 9.11, -9.11]
 
@@ -100,19 +112,19 @@ class Test(unittest.TestCase):
             self.assertNotEqual(math.root(test_numbers[equations][0], test_numbers[equations][1]), false_results[equations])
 
         with self.assertRaises(ValueError):
-            math.root(-2, 2)
+            math.root(2, -2)
 
         with self.assertRaises(ValueError):
-            math.root(-5, 4)
+            math.root(4, -5)
 
         with self.assertRaises(ValueError):
             math.root(-2, -2)
 
         with self.assertRaises(ZeroDivisionError):
-            math.root(0, -2)
+            math.root(-2, 0)
 
         with self.assertRaises(ZeroDivisionError):
-            math.root(0, -3)
+            math.root(-3, 0)
 
         with self.assertRaises(ZeroDivisionError):
             math.root(0, 0)

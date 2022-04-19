@@ -3,7 +3,7 @@
 # @brief interface for GUI communication with math library
 # @author Adam Pekný <xpekny00@vutbr.cz>
 import json
-import re
+import os
 
 from src.math_library import MathFunctions
 
@@ -26,7 +26,12 @@ def _save_int_float(expression):
 #
 _Math = MathFunctions()
 
-file = open('./dependencies/operators.json')
+math_lib_interface
+dir_path = os.path.dirname(__file__)
+filename = os.path.join(dir_path, "dependencies/operators.json")
+file = open(filename)
+
+main
 ##
 # @var _operators
 # @brief Dictionary containing information about operators loaded from operators.json file in dependencies

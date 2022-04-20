@@ -5,7 +5,7 @@
 import json
 import os
 
-from src.math_library import MathFunctions
+from math_library import MathFunctions
 
 
 def _is_numeric(expression):

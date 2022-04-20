@@ -9,7 +9,7 @@ import unittest
 ##
 # $brief Importing math functions from math_library
 #
-from src.math_library import MathFunctions
+from math_library import MathFunctions
 math = MathFunctions()
 
 ##

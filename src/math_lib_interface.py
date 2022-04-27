@@ -3,9 +3,9 @@
 # @brief interface for GUI communication with math library
 # @author Adam Pekný <xpekny00@vutbr.cz>
 import json
-import re
+import os
 
-from src.math_library import MathFunctions
+from math_library import MathFunctions
 
 
 def _is_numeric(expression):
@@ -17,7 +17,7 @@ def _is_numeric(expression):
 
 
 def _save_int_float(expression):
-    return float(expression) if float(expression) - int(expression) != 0 else int(expression)
+    return float(expression) if float(expression) - int(float(expression)) != 0 else int(expression)
 
 
 ##
@@ -26,7 +26,10 @@ def _save_int_float(expression):
 #
 _Math = MathFunctions()
 
-file = open('./dependencies/operators.json')
+dir_path = os.path.dirname(__file__)
+filename = os.path.join(dir_path, "dependencies/operators.json")
+file = open(filename)
+
 ##
 # @var _operators
 # @brief Dictionary containing information about operators loaded from operators.json file in dependencies
@@ -148,7 +151,7 @@ class MathLibInterface:
     def _validate_exp_syntax(expression):
         item_idx = 0
         for item in expression:
-            if not (_is_numeric(item) or item in _operators):
+            if not (_is_numeric(item) or item in _operators or item == '.'):
                 return False
             if item in _operators:
 

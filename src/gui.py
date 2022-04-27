@@ -724,7 +724,7 @@ class Ui_Calculator(object):
         global lastBut
         butVal = self.Calculator.sender()
         displayVal = self.Display.text()
-        if(displayVal == "0" or lastBut == self.EqualityB):
+        if(displayVal == "0" or lastBut == self.EqualityB.text()):
             self.Display.setText(butVal.text())
         else:
             self.Display.setText(displayVal+butVal.text())
@@ -737,24 +737,36 @@ class Ui_Calculator(object):
         butPressed = self.Calculator.sender().text()
         if (self.Display.text()[-1]=="."):
             pointButPressed=False
-        if (butPressed == self.DeleteB.text() and lastBut != self.EqualityB.text()):
+        if (butPressed == self.DeleteB.text()):
             ui.Display.setText(ui.Display.text()[:-1])
-        if (butPressed == self.ClearAllB.text() or self.Display.text()=="" or  lastBut == self.EqualityB.text()):
+        if (butPressed == self.ClearAllB.text() or self.Display.text()==""):
+            pointButPressed = False
             self.Display.setText("0")
         lastBut = ui.Display.text()[-1]
 
     def funcPressed(self):
         global lastBut
         global pointButPressed
-        functionButtons=[self.MultiplyB.text(), self.DivideB.text(), self.AddB.text(), self.SubB.text(), self.PowerB.text(), self.FactB.text(), self.RootB.text(), self.ModuloB.text()]
+        functionButtons=[self.MultiplyB.text(), self.DivideB.text(), self.AddB.text(), self.SubB.text(),
+                         self.PowerB.text(), self.FactB.text(), self.RootB.text(), self.ModuloB.text()]
         butVal = self.Calculator.sender().text()
+        if (butVal == self.SubB.text()):
+            if (self.Display.text()=="0"):
+                self.Display.setText(butVal)
+                return
+            self.Display.setText(ui.Display.text()+butVal)
+            lastBut = butVal
+            return
+        if (lastBut == self.SubB.text()):
+            return
+
         if (butVal != self.PointB.text()):
             pointButPressed = False
         elif (butVal == self.PointB.text()):
             if (pointButPressed or lastBut in functionButtons):
                 return
             pointButPressed=True
-        if (self.Display.text()[-1]=="."):
+        if (self.Display.text()[-1]==self.PointB.text()):
             pass
         elif (lastBut in functionButtons):
                 if (butVal != self.PointB.text()):
@@ -770,8 +782,21 @@ class Ui_Calculator(object):
 
     def eqPressed(self):
         global lastBut
-        result = str(_Interface.calc_expression(self.Display.text().replace("√", "~")))
-        self.Display.setText(result)
+        global pointButPressed
+        pointButPressed=False
+        try:
+            result = str(_Interface.calc_expression(self.Display.text().replace("√", "~")))
+            self.Display.setText(result)
+        except ZeroDivisionError:
+            self.Display.setText("MathError!")
+        except ValueError:
+            self.Display.setText("MathError!")
+        except SyntaxError:
+            self.Display.setText("SyntaxError!")
+        for i in self.Display.text():
+            if i == self.PointB.text():
+                pointButPressed=True
+
         lastBut = self.Calculator.sender().text()
 
 
@@ -783,6 +808,8 @@ class Ui_Calculator(object):
 if __name__ == "__main__":
     import sys
     global pointButPressed
+    global lastBut
+    lastBut = 0
     pointButPressed = False
     app = QtWidgets.QApplication(sys.argv)
     Calculator = QtWidgets.QMainWindow()

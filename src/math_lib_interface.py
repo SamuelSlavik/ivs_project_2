@@ -150,11 +150,16 @@ class MathLibInterface:
     @staticmethod
     def _validate_exp_syntax(expression):
         item_idx = 0
+        decimal_point_cnt = 0
         for item in expression:
             if not (_is_numeric(item) or item in _operators or item == '.'):
                 return False
+            if decimal_point_cnt > 1:
+                return False
+            if item == '.':
+                decimal_point_cnt += 1
             if item in _operators:
-
+                decimal_point_cnt = 0
                 if _operators[item]["op_number"] == 1:
                     if _operators[item]["op_side"] == 'r':
                         if item_idx >= len(expression) - 1:

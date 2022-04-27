@@ -1,0 +1,64 @@
+Deadlines:
+	17.3.2022 - project plan
+	24.3.2022 - math library tests
+	15.4.2022 - math library
+	15.4.2022 - GUI
+	15.4.2022 - GUI-math library interface
+	22.4.2022 - profiling
+	25.4.2022 - makefile
+	25.4.2022 - installer/uninstaller
+	26.4.2022 - program documentation
+	28.4.2022 - user manual
+	29.4.2022 - mockup
+	29.4.2022 - evaluation
+	29.4.2022 - project hand over
+
+Task division:
+	xpekny00:
+		- project plan
+		- GUI-math library interface
+		- program documentation
+		- profiling
+		- mockup
+		- evaluation
+		
+	xkontr02:
+		- GUI
+		- program documentation
+		- installer/uninstaller
+		- mockup
+		- evaluation
+		
+	xlasmi00:
+		- math library
+		- program documentation
+		- makefile
+		- mockup
+		- evaluation
+		
+	xslavi37:
+		- git setup and administration
+		- math library tests
+		- program documentation
+		- user manual
+		- mockup
+		- evaluation
+
+Communication channels and rules :
+	Channels:
+		1. Jira - for setting deadlines, keeping track of tasks and their current state
+	
+		2. Discord - communication channel for issues that need to be adressed quickly
+	Rules:
+		1. Everyone must be online on discrod while working
+		
+		2. Everyone has to check Jira before they stard working
+
+VCS:
+	Chosen vcs is GIT.
+	Way to connect as supervision: 
+		Link: https://github.com/SamuelSlavik/ivs_project_2
+		We added user ivskontrola (https://github.com/ivskontrola) as collaborator in 			order for them to check our repository.
+		
+		
+		 

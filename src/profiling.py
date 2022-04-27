@@ -40,5 +40,4 @@ result = Math.root(2,
                    )
                    )
 
-print(data_avg)
 print(result)

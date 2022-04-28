@@ -4,7 +4,8 @@
 # @author Michal Ľaš <xlasmi00@vutbr.cz>
 #
 
-
+##
+# @class Defining class "MathFunctions" for all the math operations
 class MathFunctions:
 
     ##
@@ -114,3 +115,5 @@ class MathFunctions:
 
     def unary_minus(self, num1: float):
         return -num1
+
+# End of file math_library.py

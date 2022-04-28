@@ -34,15 +34,16 @@ class Ui_Calculator(object):
         sizePolicy.setHeightForWidth(self.HelpB.sizePolicy().hasHeightForWidth())
         self.HelpB.setSizePolicy(sizePolicy)
         self.HelpB.setStyleSheet("QPushButton{\n"
-"    background-color: #8c8c8c;\n"
-"    border: 2px solid #8c8c8c;\n"
+"    background-color: #333333;\n"
+"    border: 2px solid #333333;\n"
+"    border-radius: 5px;\n"
 "    padding: 6px;\n"
 "}\n"
 "QPushButton:hover {\n"
-"    background-color: #969696;\n"
+"    background-color: #404040;\n"
 "}\n"
 "QPushButton:pressed {\n"
-"    background-color: #a3a3a3;\n"
+"    background-color: #4d4d4d;\n"
 "}\n"
 "\n"
 "")
@@ -669,13 +670,15 @@ class Ui_Calculator(object):
         self.PowerB.clicked.connect(self.funcPressed)
         self.RootB.clicked.connect(self.funcPressed)
         self.SubB.clicked.connect(self.funcPressed)
+        self.HelpB.clicked.connect(self.helpBPressed)
         QtCore.QMetaObject.connectSlotsByName(Calculator)
 
     def retranslateUi(self, Calculator):
         _translate = QtCore.QCoreApplication.translate
+        helpIcon = QtGui.QPixmap("dependencies/help_icon.svg")
         Calculator.setWindowTitle(_translate("Calculator", "Calculator"))
-        self.HelpB.setToolTip(_translate("Calculator", "<html><head/><body><p><br/></p></body></html>"))
-        self.HelpB.setText(_translate("Calculator", "?"))
+        self.HelpB.setIcon(QtGui.QIcon(helpIcon))
+        self.HelpB.setIconSize(QtCore.QSize(24, 24))
         self.Button8.setText(_translate("Calculator", "8"))
         self.Button8.setShortcut(_translate("Calculator", "8"))
         self.Button9.setText(_translate("Calculator", "9"))
@@ -722,10 +725,9 @@ class Ui_Calculator(object):
 
     def numPressed(self):
         global lastBut
-
         butVal = self.Calculator.sender()
         displayVal = self.Display.text()
-        if(displayVal == "0" or lastBut == self.EqualityB):
+        if(displayVal == "0" or lastBut == self.EqualityB.text()):
             self.Display.setText(butVal.text())
         else:
             self.Display.setText(displayVal+butVal.text())
@@ -735,44 +737,74 @@ class Ui_Calculator(object):
     def removePressed(self):
         global pointButPressed
         global lastBut
-        butPressed = self.Calculator.sender()
+        butPressed = self.Calculator.sender().text()
         if (self.Display.text()[-1]=="."):
             pointButPressed=False
-        if (butPressed == self.DeleteB and lastBut != self.EqualityB):
+        if (butPressed == self.DeleteB.text()):
             ui.Display.setText(ui.Display.text()[:-1])
-        if (butPressed == self.ClearAllB or self.Display.text()=="" or  lastBut == self.EqualityB):
+        if (butPressed == self.ClearAllB.text() or self.Display.text()==""):
+            pointButPressed = False
             self.Display.setText("0")
         lastBut = ui.Display.text()[-1]
 
     def funcPressed(self):
         global lastBut
         global pointButPressed
-        butVal = self.Calculator.sender()
-        if (butVal != self.PointB):
-            pointButPressed = False
-        elif (butVal == self.PointB):
-            if (pointButPressed):
+        functionButtons = [self.MultiplyB.text(), self.DivideB.text(), self.AddB.text(), self.SubB.text(),
+                         self.PowerB.text(), self.FactB.text(), self.RootB.text(), self.ModuloB.text()]
+        butVal = self.Calculator.sender().text()
+        if (butVal == self.SubB.text()):
+            if (self.Display.text()=="0"):
+                self.Display.setText(butVal)
                 return
-            pointButPressed=True
-        if (lastBut == self.MultiplyB or lastBut == self.DivideB or lastBut == self.AddB or lastBut == self.SubB or
-             lastBut == self.PowerB or lastBut == self.FactB or lastBut == self.RootB or lastBut == self.ModuloB):
-                if (butVal != "."):
-                    self.Display.setText(self.Display.text()[:-1]+butVal.text())
+            self.Display.setText(ui.Display.text()+butVal)
+            lastBut = butVal
+            return
+        if (lastBut == self.SubB.text()):
+            return
+
+        if (butVal != self.PointB.text()):
+            pointButPressed = False
+        elif (butVal == self.PointB.text()):
+            if (pointButPressed or lastBut in functionButtons):
+                return
+            pointButPressed = True
+        if (self.Display.text()[-1]==self.PointB.text()):
+            pass
+        elif (lastBut in functionButtons):
+                if (butVal != self.PointB.text()):
+                    self.Display.setText(self.Display.text()[:-1]+butVal)
                 else:
-                    pointButPressed=False
+                    pointButPressed = False
                     return
-        elif (lastBut == "."):
+        elif (lastBut == self.PointB.text()):
             return
         else:
-            self.Display.setText(ui.Display.text()+butVal.text())
+            self.Display.setText(ui.Display.text()+butVal)
         lastBut = butVal
 
     def eqPressed(self):
         global lastBut
-        result = str(_Interface.calc_expression(self.Display.text().replace("√", "~")))
-        self.Display.setText(result)
-        lastBut = self.Calculator.sender()
+        global pointButPressed
+        pointButPressed = False
+        try:
+            result = str(_Interface.calc_expression(self.Display.text().replace("√", "~")))
+            self.Display.setText(result)
+        except ZeroDivisionError:
+            self.Display.setText("MathError!")
+        except ValueError:
+            self.Display.setText("MathError!")
+        except SyntaxError:
+            self.Display.setText("SyntaxError!")
+        for i in self.Display.text():
+            if i == self.PointB.text():
+                pointButPressed = True
 
+        lastBut = self.Calculator.sender().text()
+    def helpBPressed(self):
+        import webbrowser
+        path = 'help.pdf'
+        webbrowser.open_new(path)
 
 
 
@@ -781,6 +813,10 @@ class Ui_Calculator(object):
 
 if __name__ == "__main__":
     import sys
+    global pointButPressed
+    global lastBut
+    lastBut = 0
+    pointButPressed = False
     app = QtWidgets.QApplication(sys.argv)
     Calculator = QtWidgets.QMainWindow()
     ui = Ui_Calculator()

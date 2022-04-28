@@ -17,4 +17,4 @@ MCBP.php
 Licence
 -------
 
-Without licence
+GNU General Public License v.3

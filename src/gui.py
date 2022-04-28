@@ -3,7 +3,8 @@
 # @brief calculator graphic user interface
 # @author Jakub Kontrík <xkontr020@vutbr.cz>
 
-
+import webbrowser
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.math_lib_interface import MathLibInterface
 _Interface = MathLibInterface()
@@ -675,7 +676,9 @@ class Ui_Calculator(object):
 
     def retranslateUi(self, Calculator):
         _translate = QtCore.QCoreApplication.translate
-        helpIcon = QtGui.QPixmap("dependencies/help.png")
+        dir_path = os.path.dirname(__file__)
+        filename = os.path.join(dir_path, "src/dependencies/help.png")
+        helpIcon = QtGui.QPixmap(filename)
         Calculator.setWindowTitle(_translate("Calculator", "Calculator"))
         self.HelpB.setIcon(QtGui.QIcon(helpIcon))
         self.HelpB.setIconSize(QtCore.QSize(24, 24))
@@ -806,9 +809,9 @@ class Ui_Calculator(object):
 
         lastBut = self.Calculator.sender().text()
     def helpBPressed(self):
-        import webbrowser
-        path = 'dependencies/help.pdf'
-        webbrowser.open_new(path)
+        dir_path = os.path.dirname(__file__)
+        filename = os.path.join(dir_path, "src/dependencies/help.pdf")
+        webbrowser.open_new(filename)
 
 
 

@@ -5,7 +5,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from math_lib_interface import MathLibInterface
+from src.math_lib_interface import MathLibInterface
 _Interface = MathLibInterface()
 
 class Ui_Calculator(object):

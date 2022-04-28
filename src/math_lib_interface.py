@@ -5,7 +5,7 @@
 import json
 import os
 
-from math_library import MathFunctions
+from src.math_library import MathFunctions
 
 ## _is_numeric
 # @brief private function to check if expression string is numeric (is int or float)

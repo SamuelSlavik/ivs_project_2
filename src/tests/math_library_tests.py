@@ -7,13 +7,13 @@
 import unittest
 
 ##
-# $brief Importing math functions from math_library
+# @brief Importing math functions from math_library
 #
 from math_library import MathFunctions
 math = MathFunctions()
 
 ##
-# @brief Defining class "Test" for all the tests
+# @class Defining class "Test" for all the tests
 #
 class Test(unittest.TestCase):
 
@@ -184,3 +184,5 @@ class Test(unittest.TestCase):
 
         with self.assertRaises(ZeroDivisionError):
             math.modulo(1, 0)
+
+# End of file math_library_tests.py

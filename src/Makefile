@@ -27,9 +27,12 @@ profile: $(SRC_FILES)
 	python3 -m profiling
 
 
-doc: $(SRC_FILES) $(SRC_FILES)
+doc: Doxyfile $(SRC_FILES) $(SRC_FILES)
 	cd .. && rm -rf $(PROGRAM_DOC)
 	cd .. && mkdir -p $(PROGRAM_DOC)
+	doxygen $(SRC_TETS) $(SRC_FILES)
+	mv html ../$(PROGRAM_DOC)
+	mv latex ../$(PROGRAM_DOC)
 	
 
 clean:

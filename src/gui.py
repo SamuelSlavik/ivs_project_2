@@ -675,6 +675,7 @@ class Ui_Calculator(object):
 
     def retranslateUi(self, Calculator):
         _translate = QtCore.QCoreApplication.translate
+
         helpIcon = QtGui.QPixmap("dependencies/help.png")
         Calculator.setWindowTitle(_translate("Calculator", "Calculator"))
         self.HelpB.setIcon(QtGui.QIcon(helpIcon))

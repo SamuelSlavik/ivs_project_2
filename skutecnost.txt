@@ -1,0 +1,9 @@
+In the beginning we were meeting the plan quite nicely,
+but in the end there were some several problems with the deadlines.
+The very last day before deadline was very long.
+
+Main problems:
+- Not meeting all the deadlines in the later stages
+- Leaving the implementation of installer to the very last day
+
+Created on 28.4.2022

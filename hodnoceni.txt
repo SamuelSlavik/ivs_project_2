@@ -1,0 +1,4 @@
+xpekny00 100 (plán, interface, profiling)
+xlasmi00 100 (matematická knižnica, makefile, programová dokumentácia)
+xkontr02 100 (GUI, inštalátor)
+xslavi37 100 (testy, uživateľská príručka, správa git repozitára)

@@ -5,7 +5,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from math_lib_interface import MathLibInterface
+from src.math_lib_interface import MathLibInterface
 _Interface = MathLibInterface()
 
 class Ui_Calculator(object):
@@ -675,7 +675,8 @@ class Ui_Calculator(object):
 
     def retranslateUi(self, Calculator):
         _translate = QtCore.QCoreApplication.translate
-        helpIcon = QtGui.QPixmap("dependencies/help_icon.svg")
+
+        helpIcon = QtGui.QPixmap("dependencies/help.png")
         Calculator.setWindowTitle(_translate("Calculator", "Calculator"))
         self.HelpB.setIcon(QtGui.QIcon(helpIcon))
         self.HelpB.setIconSize(QtCore.QSize(24, 24))
@@ -738,9 +739,12 @@ class Ui_Calculator(object):
         global pointButPressed
         global lastBut
         butPressed = self.Calculator.sender().text()
-        if (self.Display.text()[-1]=="."):
-            pointButPressed=False
+        if (self.Display.text() == "MathError!" or self.Display.text() == "SyntaxError!"):
+            pointButPressed = False
+            self.Display.setText("0")
         if (butPressed == self.DeleteB.text()):
+            if (self.Display.text()[-1] == self.PointB.text()):
+                pointButPressed = False
             ui.Display.setText(ui.Display.text()[:-1])
         if (butPressed == self.ClearAllB.text() or self.Display.text()==""):
             pointButPressed = False
@@ -756,6 +760,7 @@ class Ui_Calculator(object):
         if (butVal == self.SubB.text()):
             if (self.Display.text()=="0"):
                 self.Display.setText(butVal)
+                lastBut = butVal
                 return
             self.Display.setText(ui.Display.text()+butVal)
             lastBut = butVal
@@ -803,7 +808,7 @@ class Ui_Calculator(object):
         lastBut = self.Calculator.sender().text()
     def helpBPressed(self):
         import webbrowser
-        path = 'help.pdf'
+        path = 'dependencies/help.pdf'
         webbrowser.open_new(path)
 
 

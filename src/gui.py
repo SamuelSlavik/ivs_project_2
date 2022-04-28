@@ -807,7 +807,7 @@ class Ui_Calculator(object):
         lastBut = self.Calculator.sender().text()
     def helpBPressed(self):
         import webbrowser
-        path = 'help.pdf'
+        path = 'dependencies/help.pdf'
         webbrowser.open_new(path)
 
 

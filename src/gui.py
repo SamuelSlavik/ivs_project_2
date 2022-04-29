@@ -676,9 +676,10 @@ class Ui_Calculator(object):
 
     def retranslateUi(self, Calculator):
         _translate = QtCore.QCoreApplication.translate
-        dir_path = os.path.dirname(__file__)
-        filename = os.path.join(dir_path, "src/dependencies/help.png")
-        helpIcon = QtGui.QPixmap(filename)
+        default_path = os.path.abspath(os.path.dirname(__file__))
+        bundle_dir = getattr(sys, '_MEIPASS', default_path[0:len(default_path) - 3])
+        path_to_help = os.path.abspath(os.path.join(bundle_dir, 'src/dependencies/help.png'))
+        helpIcon = QtGui.QPixmap(path_to_help)
         Calculator.setWindowTitle(_translate("Calculator", "Calculator"))
         self.HelpB.setIcon(QtGui.QIcon(helpIcon))
         self.HelpB.setIconSize(QtCore.QSize(24, 24))
@@ -809,9 +810,10 @@ class Ui_Calculator(object):
         lastBut = self.Calculator.sender().text()
 
     def helpBPressed(self):
-        dir_path = os.path.dirname(__file__)
-        filename = os.path.join(dir_path, "src/dependencies/help.pdf")
-        webbrowser.open_new(filename)
+        default_path = os.path.abspath(os.path.dirname(__file__))
+        bundle_dir = getattr(sys, '_MEIPASS', default_path[0:len(default_path)-3])
+        path_to_help = os.path.abspath(os.path.join(bundle_dir, 'src/dependencies/help.pdf'))
+        webbrowser.open_new(path_to_help)
 
 
 

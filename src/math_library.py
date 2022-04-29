@@ -98,7 +98,7 @@ class MathFunctions:
                 else:
                     return round(-((-num1) ** (1 / root)), 14)
             except ZeroDivisionError:
-                ZeroDivisionError
+                raise ZeroDivisionError
 
     ##
     # @brief function for modulo dividing

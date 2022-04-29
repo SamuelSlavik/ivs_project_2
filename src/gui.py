@@ -736,7 +736,6 @@ class Ui_Calculator(object):
             self.Display.setText(displayVal+butVal.text())
         lastBut = butVal
 
-
     def removePressed(self):
         global pointButPressed
         global lastBut
@@ -760,6 +759,7 @@ class Ui_Calculator(object):
                          self.PowerB.text(), self.FactB.text(), self.RootB.text(), self.ModuloB.text()]
         butVal = self.Calculator.sender().text()
         if (butVal == self.SubB.text()):
+            pointButPressed = False
             if (self.Display.text()=="0"):
                 self.Display.setText(butVal)
                 lastBut = butVal
@@ -806,8 +806,8 @@ class Ui_Calculator(object):
         for i in self.Display.text():
             if i == self.PointB.text():
                 pointButPressed = True
-
         lastBut = self.Calculator.sender().text()
+
     def helpBPressed(self):
         dir_path = os.path.dirname(__file__)
         filename = os.path.join(dir_path, "src/dependencies/help.pdf")

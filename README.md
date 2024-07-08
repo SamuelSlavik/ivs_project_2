@@ -4,6 +4,7 @@
 
 ## Project Description
 School project for IVS at Brno University of Technology. Desktop calculator application for linux based operating systems.
+
 <br/>
 
 ## Technologies / Stack

@@ -1,12 +1,16 @@
 # ivs_project_2
 
-Prostredi
----------
+## Project Description
+School project for IVS at Brno University of Technology. Desktop calculator application for linux based operating systems.
 
-Ubuntu 64bit
+## Technologies / Stack
+- Python
+- Qt
 
-Autori
-------
+## Installation / Setup
+See dokumentace.pdf
+
+### Authors
 
 MCBP.php
 - xpekny00, Adam Pekný 
@@ -14,7 +18,6 @@ MCBP.php
 - xlasmi00, Michal Ľaš 
 - xslavi37, Samuel Slávik 
 
-Licence
--------
+### License
 
 GNU General Public License v.3

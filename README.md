@@ -10,7 +10,7 @@ School project for IVS at Brno University of Technology. Desktop calculator appl
 ## Installation / Setup
 See dokumentace.pdf
 
-### Authors
+## Authors
 
 MCBP.php
 - xpekny00, Adam Pekný 
@@ -18,6 +18,6 @@ MCBP.php
 - xlasmi00, Michal Ľaš 
 - xslavi37, Samuel Slávik 
 
-### License
+## License
 
 GNU General Public License v.3
